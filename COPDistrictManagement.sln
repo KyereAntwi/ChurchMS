@@ -1,8 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FD983C9E-6AD3-496C-889F-6382E55BB6AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{33B3F832-6D54-4F95-B74B-AB73F3F89C1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COPDistrictMS.Domain", "COPDistrictMS.Domain\COPDistrictMS.Domain.csproj", "{AFE591B2-1BFE-492E-959A-D3FA4C0E3F5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COPDistrictMS.Application", "COPDistrictMS.Application\COPDistrictMS.Application.csproj", "{FA929CAC-95CD-4615-9671-C25A5FC78DCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{33B3F832-6D54-4F95-B74B-AB73F3F89C1D} = {FD983C9E-6AD3-496C-889F-6382E55BB6AD}
+		{AFE591B2-1BFE-492E-959A-D3FA4C0E3F5D} = {33B3F832-6D54-4F95-B74B-AB73F3F89C1D}
+		{FA929CAC-95CD-4615-9671-C25A5FC78DCB} = {33B3F832-6D54-4F95-B74B-AB73F3F89C1D}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFE591B2-1BFE-492E-959A-D3FA4C0E3F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE591B2-1BFE-492E-959A-D3FA4C0E3F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE591B2-1BFE-492E-959A-D3FA4C0E3F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE591B2-1BFE-492E-959A-D3FA4C0E3F5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA929CAC-95CD-4615-9671-C25A5FC78DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA929CAC-95CD-4615-9671-C25A5FC78DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA929CAC-95CD-4615-9671-C25A5FC78DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA929CAC-95CD-4615-9671-C25A5FC78DCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
