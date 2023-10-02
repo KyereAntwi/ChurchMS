@@ -15,7 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\Persistence\" />
+      <ProjectReference Include="..\COPDistrictMS.Domain\COPDistrictMS.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\" />
     </ItemGroup>
 
 </Project>
