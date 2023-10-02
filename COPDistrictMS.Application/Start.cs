@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using COPDistrictMS.Application.Commons;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace COPDistrictMS.Application;
 
@@ -9,7 +10,7 @@ public static class Start
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddMediatR(req =>
         {
-            
+            req.RegisterServicesFromAssemblyContaining<MappingProfiles>();
         });
         
         return services;

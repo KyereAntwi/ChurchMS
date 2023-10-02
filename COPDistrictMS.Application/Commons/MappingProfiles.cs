@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using COPDistrictMS.Application.Features.Districts.Queries.GetAll;
+using COPDistrictMS.Application.Features.Districts.Dtos;
 using COPDistrictMS.Domain.Entities;
 
 namespace COPDistrictMS.Application.Commons;
