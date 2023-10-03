@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using COPDistrictMS.Application.Commons;
-using COPDistrictMS.Application.Features.Districts.Dtos;
+using COPDistrictMS.Application.Features.Dtos;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
 

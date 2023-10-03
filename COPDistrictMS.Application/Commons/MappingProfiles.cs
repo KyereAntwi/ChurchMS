@@ -2,7 +2,7 @@
 using COPDistrictMS.Application.Features.Districts.Commands.CreateADistrict;
 using COPDistrictMS.Application.Features.Districts.Commands.CreateDistrictWithAssemblies;
 using COPDistrictMS.Application.Features.Districts.Commands.UpdateDistrict;
-using COPDistrictMS.Application.Features.Districts.Dtos;
+using COPDistrictMS.Application.Features.Dtos;
 using COPDistrictMS.Domain.Entities;
 
 namespace COPDistrictMS.Application.Commons;

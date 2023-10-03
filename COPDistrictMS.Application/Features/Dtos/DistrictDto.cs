@@ -1,4 +1,4 @@
-﻿namespace COPDistrictMS.Application.Features.Districts.Dtos;
+﻿namespace COPDistrictMS.Application.Features.Dtos;
 
 public class DistrictDto
 {
