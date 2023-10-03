@@ -18,4 +18,9 @@
       <ProjectReference Include="..\COPDistrictMS.Domain\COPDistrictMS.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Assemblies\Commands\CreateMultipleAssemblies\" />
+      <Folder Include="Features\Assemblies\Queries\" />
+    </ItemGroup>
+
 </Project>

@@ -10,6 +10,7 @@ public record CreateDistrictWithAssembliesCommand(
     string Title,
     string Area,
     string DistrictPastor,
+    string LoggedInUsername,
     List<CreateAssemblyDto>? AssemblyDtos
     ) : IRequest<BaseResponse>;
 
@@ -46,10 +47,18 @@ public class CreateDistrictWithAssembliesCommandHandler : IRequestHandler<Create
         }
 
         var district = _mapper.Map<District>(request);
+        district.CreatedAt = DateTime.UtcNow;
+        district.UpdatedAt = DateTime.UtcNow;
+        district.CreatedBy = request.LoggedInUsername;
 
         foreach(var assembly in request.AssemblyDtos!)
         {
-            district.Assemblies.Add(_mapper.Map<Assembly>(assembly));
+            var newAssembly = _mapper.Map<Assembly>(assembly);
+            newAssembly.CreatedBy = request.LoggedInUsername;
+            newAssembly.CreatedAt = DateTime.UtcNow;
+            newAssembly.UpdatedAt = DateTime.UtcNow;
+
+            district.Assemblies.Add(newAssembly);
         }
 
         var newDistrict = await _asyncRepository.AddAsync(district);
