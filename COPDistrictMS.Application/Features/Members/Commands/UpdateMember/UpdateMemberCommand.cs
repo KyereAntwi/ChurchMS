@@ -6,11 +6,11 @@ using COPDistrictMS.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using SVoting.Application.Exceptions;
-using System.Security.Claims;
 
-namespace COPDistrictMS.Application.Features.Members.Commands.AddAMember;
+namespace COPDistrictMS.Application.Features.Members.Commands.UpdateMember;
 
-public record AddAMemberCommand(
+public record UpdateMemberCommand(
+    Guid Id,
     string LastName,
     string GivingName,
     string OtherNames,
@@ -25,37 +25,38 @@ public record AddAMemberCommand(
     string OfficeType
     ) : IRequest<BaseResponse>;
 
-public class AddAMemberCommandHandler : IRequestHandler<AddAMemberCommand, BaseResponse>
+public class UpdateMemberCommandHandler : IRequestHandler<UpdateMemberCommand, BaseResponse>
 {
-    private readonly IAsyncRepository<Member> _asyncRepository;
+    private readonly IMemberRepository _memberRepository;
     private readonly IAssemblyRepository _assemblyRepository;
     private readonly IOfficerRepository _officerRepository;
     private readonly IImageService _imageService;
     private readonly IMapper _mapper;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AddAMemberCommandHandler(
-        IAsyncRepository<Member> asyncRepository, 
-        IMapper mapper,
-        IAssemblyRepository assemblyRepository,
+    public UpdateMemberCommandHandler(
+        IMemberRepository memberRepository, 
+        IAssemblyRepository assemblyRepository, 
         IOfficerRepository officerRepository,
-        IImageService imageService,
-        IHttpContextAccessor httpContextAccessor)
+        IMapper mapper,
+        IImageService imageService
+        )
     {
-        _asyncRepository = asyncRepository;
+        _memberRepository = memberRepository;
         _assemblyRepository = assemblyRepository;
         _officerRepository = officerRepository;
         _imageService = imageService;
         _mapper = mapper;
-        _httpContextAccessor = httpContextAccessor;
     }
-
-    public async Task<BaseResponse> Handle(AddAMemberCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse> Handle(UpdateMemberCommand request, CancellationToken cancellationToken)
     {
+        var member = await _memberRepository.GetByIdAsync( request.Id );
+        if (member is null)
+            throw new NotFoundException($"Specified member with Id {request.Id} was not found.", typeof(Member));
+
         var response = new BaseResponse();
 
-        var validation = new AddAMemberCommandValidator(_officerRepository);
-        var validationResponse = await validation.ValidateAsync(request, cancellationToken);
+        var validation = new UpdateMemberCommandValidator();
+        var validationResponse = await validation.ValidateAsync( request, cancellationToken );
 
         if (validationResponse.Errors.Any())
         {
@@ -63,7 +64,7 @@ public class AddAMemberCommandHandler : IRequestHandler<AddAMemberCommand, BaseR
             response.Message = "Operation to update member failed due to some validation errors";
             response.ValidationErrors = new List<string>();
 
-            foreach (var error in validationResponse.Errors)
+            foreach ( var error in validationResponse.Errors )
             {
                 response.ValidationErrors.Add(error.ErrorMessage);
             }
@@ -74,10 +75,10 @@ public class AddAMemberCommandHandler : IRequestHandler<AddAMemberCommand, BaseR
         Assembly? memberAssembly = null;
         OfficerType? memberOffice = null;
 
-        if ( request.AssemblyId != Guid.Empty ) 
+        if (request.AssemblyId != Guid.Empty)
         {
-            var assembly = await _assemblyRepository.GetByIdAsync( request.AssemblyId );
-            if ( assembly == null )
+            var assembly = await _assemblyRepository.GetByIdAsync(request.AssemblyId);
+            if (assembly == null)
             {
                 throw new NotFoundException($"The specified assembly with Id {request.AssemblyId} was not found", typeof(Assembly));
             }
@@ -88,7 +89,7 @@ public class AddAMemberCommandHandler : IRequestHandler<AddAMemberCommand, BaseR
         if (!string.IsNullOrWhiteSpace(request.OfficeType))
         {
             var officerType = await _officerRepository.GetByType(request.OfficeType);
-            if ( officerType == null )
+            if (officerType == null)
             {
                 throw new NotFoundException($"The specified officer type with name {request.OfficeType} is not registered", typeof(OfficerType));
             }
@@ -96,35 +97,28 @@ public class AddAMemberCommandHandler : IRequestHandler<AddAMemberCommand, BaseR
             memberOffice = officerType;
         }
 
-        var member = _mapper.Map<Member>( request );
-        var address = _mapper.Map<Address>( request );
+        // start updating properties of the member
+        var updatedMember = _mapper.Map<Member>( request );
+        var updatedAddress = _mapper.Map<Address>( request );
 
-        member.Address = address;
-        member.CreatedAt = DateTime.UtcNow;
-        member.UpdatedAt = DateTime.UtcNow;
+        updatedMember.UpdatedAt = DateTime.UtcNow;
+        updatedMember.Address = updatedAddress;
 
-        // Accessing the logged-in user's ID
-        string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        member.CreatedBy = userId;
+        if(memberAssembly != null)
+            updatedMember.Assembly = memberAssembly;
 
-        if(memberAssembly is not null)
-            member.Assembly = memberAssembly;
+        if(memberOffice != null)
+            updatedMember.OfficerType = memberOffice;
 
-        if(memberOffice is not null)
-            member.OfficerType = memberOffice;
-
-        // work on member photograph
-        if(request.Photograph is not null)
+        if(request.Photograph != null)
         {
-            member.PhotographUrl = await _imageService.UploadFileToFirebase( request.Photograph );
+            updatedMember.PhotographUrl = await _imageService.UploadFileToFirebase(request.Photograph);
         }
 
-        var newMember = await _asyncRepository.AddAsync(member );
+        await _memberRepository.UpdateAsync(updatedMember);
 
         response.Success = true;
-        response.Message = "Operation to add a new member was successful";
-        response.Data = newMember.Id;
-
+        response.Data = updatedMember.Id;
         return response;
     }
 }
