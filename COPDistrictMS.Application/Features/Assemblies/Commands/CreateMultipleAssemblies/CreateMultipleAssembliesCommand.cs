@@ -3,12 +3,13 @@ using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Application.Features.Dtos;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace COPDistrictMS.Application.Features.Assemblies.Commands.CreateMultipleAssemblies;
 
 public record CreateMultipleAssembliesCommand(
     Guid DistrictId,
-    string LoggedInUsername,
     List<CreateAssemblyDto> CreateAssemblyDtos
     ) : IRequest<BaseResponse>;
 
@@ -16,11 +17,13 @@ public class CreateMultipleAssembliesCommandHandler : IRequestHandler<CreateMult
 {
     private readonly IDistrictRepository _asyncRepository;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CreateMultipleAssembliesCommandHandler(IDistrictRepository asyncRepository, IMapper mapper)
+    public CreateMultipleAssembliesCommandHandler(IDistrictRepository asyncRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _asyncRepository = asyncRepository;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<BaseResponse> Handle(CreateMultipleAssembliesCommand request, CancellationToken cancellationToken)
@@ -45,10 +48,16 @@ public class CreateMultipleAssembliesCommandHandler : IRequestHandler<CreateMult
         }
 
         var district = await _asyncRepository.GetDistrictWithAssembliesFull(request.DistrictId);
+        string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
         foreach (var assembly in request.CreateAssemblyDtos)
         {
-            district!.Assemblies.Add(_mapper.Map<Assembly>(assembly));
+            var newAssembly = _mapper.Map<Assembly>(assembly);
+            newAssembly.CreatedBy = userId;
+            newAssembly.CreatedAt = DateTime.UtcNow;
+            newAssembly.UpdatedAt = DateTime.UtcNow;
+
+            district!.Assemblies.Add(newAssembly);
             await _asyncRepository.SaveAsync();
         }
 

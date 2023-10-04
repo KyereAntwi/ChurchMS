@@ -2,25 +2,28 @@
 using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace COPDistrictMS.Application.Features.Districts.Commands.CreateADistrict;
 
 public record CreateADistrictCommand(
     string Title,
     string Area,
-    string DistrictPastor,
-    string LoggedInUserEmail
+    string DistrictPastor
     ) : IRequest<BaseResponse>;
 
 public class CreateADistrictCommandHandler : IRequestHandler<CreateADistrictCommand, BaseResponse>
 {
     private readonly IAsyncRepository<District> _asyncRepository;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CreateADistrictCommandHandler(IAsyncRepository<District> asyncRepository, IMapper mapper)
+    public CreateADistrictCommandHandler(IAsyncRepository<District> asyncRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _asyncRepository = asyncRepository;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<BaseResponse> Handle(CreateADistrictCommand request, CancellationToken cancellationToken)
@@ -45,7 +48,8 @@ public class CreateADistrictCommandHandler : IRequestHandler<CreateADistrictComm
 
         var district = _mapper.Map<District>( request );
 
-        district.CreatedBy = request.LoggedInUserEmail;
+        string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        district.CreatedBy = userId;
         district.UpdatedAt = DateTime.UtcNow;
         district.CreatedAt = DateTime.UtcNow;
 

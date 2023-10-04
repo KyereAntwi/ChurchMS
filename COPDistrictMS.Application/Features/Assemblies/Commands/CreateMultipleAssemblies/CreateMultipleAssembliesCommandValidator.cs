@@ -11,10 +11,6 @@ public class CreateMultipleAssembliesCommandValidator : AbstractValidator<Create
     {
         _asyncRepository = asyncRepository;
 
-        RuleFor(d => d.LoggedInUsername)
-            .NotEmpty().WithMessage("{PropertyName} must not be empty")
-            .NotNull();
-
         RuleForEach(d => d.CreateAssemblyDtos)
             .ChildRules(a =>
             {

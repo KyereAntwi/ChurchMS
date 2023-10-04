@@ -2,6 +2,8 @@
 using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace COPDistrictMS.Application.Features.Districts.Commands.UpdateDistrict;
 
@@ -9,18 +11,19 @@ public record UpdateDistrictCommand(
     Guid Id,
     string Title,
     string Area,
-    string DistrictPastor,
-    string LoggedInUserEmail
+    string DistrictPastor
     ) : IRequest<BaseResponse>;
 
 public class UpdateDistrictCommandHandler : IRequestHandler<UpdateDistrictCommand, BaseResponse>
 {
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IAsyncRepository<District> _asyncRepository;
 
-    public UpdateDistrictCommandHandler(IAsyncRepository<District> asyncRepository, IMapper mapper)
+    public UpdateDistrictCommandHandler(IAsyncRepository<District> asyncRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
         _asyncRepository = asyncRepository;
     }
 
@@ -51,7 +54,9 @@ public class UpdateDistrictCommandHandler : IRequestHandler<UpdateDistrictComman
 
         var updatedDistrict = _mapper.Map<District>(request);
         updatedDistrict.UpdatedAt = DateTime.UtcNow;
-        updatedDistrict.CreatedBy = request.LoggedInUserEmail; // replace createdBy with updatedBy - same meaning
+
+        string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        updatedDistrict.CreatedBy = userId; // replace createdBy with updatedBy - same meaning
 
         await _asyncRepository.UpdateAsync(updatedDistrict);
 

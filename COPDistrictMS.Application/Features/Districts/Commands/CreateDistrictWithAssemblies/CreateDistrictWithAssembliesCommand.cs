@@ -3,6 +3,8 @@ using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Application.Features.Dtos;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace COPDistrictMS.Application.Features.Districts.Commands.CreateDistrictWithAssemblies;
 
@@ -10,7 +12,6 @@ public record CreateDistrictWithAssembliesCommand(
     string Title,
     string Area,
     string DistrictPastor,
-    string LoggedInUsername,
     List<CreateAssemblyDto>? AssemblyDtos
     ) : IRequest<BaseResponse>;
 
@@ -18,11 +19,13 @@ public class CreateDistrictWithAssembliesCommandHandler : IRequestHandler<Create
 {
     private readonly IAsyncRepository<District> _asyncRepository;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CreateDistrictWithAssembliesCommandHandler(IAsyncRepository<District> asyncRepository, IMapper mapper)
+    public CreateDistrictWithAssembliesCommandHandler(IAsyncRepository<District> asyncRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _asyncRepository = asyncRepository;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<BaseResponse> Handle(CreateDistrictWithAssembliesCommand request, CancellationToken cancellationToken)
@@ -46,15 +49,17 @@ public class CreateDistrictWithAssembliesCommandHandler : IRequestHandler<Create
             return response;
         }
 
+        string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
         var district = _mapper.Map<District>(request);
         district.CreatedAt = DateTime.UtcNow;
         district.UpdatedAt = DateTime.UtcNow;
-        district.CreatedBy = request.LoggedInUsername;
+        district.CreatedBy = userId;
 
         foreach(var assembly in request.AssemblyDtos!)
         {
             var newAssembly = _mapper.Map<Assembly>(assembly);
-            newAssembly.CreatedBy = request.LoggedInUsername;
+            newAssembly.CreatedBy = userId;
             newAssembly.CreatedAt = DateTime.UtcNow;
             newAssembly.UpdatedAt = DateTime.UtcNow;
 

@@ -2,6 +2,8 @@
 using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace COPDistrictMS.Application.Features.Assemblies.Commands.CreateAnAssembly;
 
@@ -9,20 +11,25 @@ public record CreateAnAssemblyCommand(
     string Title,
     string Location,
     string YearEstablished,
-    Guid DistrictId,
-    string LoggedInUsername
+    Guid DistrictId
     ) : IRequest<BaseResponse>;
 
 public class CreateAnAssemblyCommandHandler : IRequestHandler<CreateAnAssemblyCommand, BaseResponse>
 {
     private readonly IAsyncRepository<Assembly> _asyncRepository;
     private readonly IAsyncRepository<District> _districtRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMapper _mapper;
 
-    public CreateAnAssemblyCommandHandler(IAsyncRepository<Assembly> asyncRepository, IAsyncRepository<District> districtRepository, IMapper mapper)
+    public CreateAnAssemblyCommandHandler(
+        IAsyncRepository<Assembly> asyncRepository, 
+        IAsyncRepository<District> districtRepository,
+        IHttpContextAccessor httpContextAccessor,
+        IMapper mapper)
     {
         _asyncRepository = asyncRepository;
         _districtRepository = districtRepository;
+        _httpContextAccessor = httpContextAccessor;
         _mapper = mapper;
     }
 
@@ -50,7 +57,9 @@ public class CreateAnAssemblyCommandHandler : IRequestHandler<CreateAnAssemblyCo
 
         var assembly = _mapper.Map<Assembly>(request);
 
-        assembly.CreatedBy = request.LoggedInUsername;
+        string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+        assembly.CreatedBy = userId;
         assembly.CreatedAt = DateTime.Now;
         assembly.UpdatedAt = DateTime.Now;
 

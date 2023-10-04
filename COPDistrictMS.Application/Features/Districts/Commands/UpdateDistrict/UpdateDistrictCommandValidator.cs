@@ -23,10 +23,6 @@ public class UpdateDistrictCommandValidator : AbstractValidator<UpdateDistrictCo
             .NotEmpty().WithMessage("{PropertyName} must not be empty")
             .NotNull();
 
-        RuleFor(d => d.LoggedInUserEmail)
-            .NotEmpty().WithMessage("{PropertyName} must not be empty")
-            .NotNull();
-
         RuleFor(d => d)
             .MustAsync(DistrictExists).WithMessage("Specified district does not exist");
     }

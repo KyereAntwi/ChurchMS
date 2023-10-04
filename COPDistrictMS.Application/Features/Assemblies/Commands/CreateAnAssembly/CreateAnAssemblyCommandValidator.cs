@@ -24,10 +24,6 @@ public class CreateAnAssemblyCommandValidator : AbstractValidator<CreateAnAssemb
             .MinimumLength(4)
             .NotNull();
 
-        RuleFor(a => a.LoggedInUsername)
-            .NotEmpty().WithMessage("{PropertyName} must not be empty")
-            .NotNull();
-
         RuleFor(a => a)
             .MustAsync(DistrictExist).WithMessage("The specified district does not exist");
     }
