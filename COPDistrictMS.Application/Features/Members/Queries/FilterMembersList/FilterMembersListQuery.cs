@@ -9,7 +9,7 @@ namespace COPDistrictMS.Application.Features.Members.Queries.FilterMembersList;
 public record FilterMembersListQuery(
     Guid DistrictId,
     string NameString,
-    Guid OfficeTypeId,
+    string Gender,
     Guid AssemblyId,
     DateOnly DateOfBirth,
     int MonthOfBirth,
@@ -37,7 +37,7 @@ public class FilterMembersListQueryHandler : IRequestHandler<FilterMembersListQu
             request.AssemblyId,
             request.DistrictId,
             request.NameString,
-            request.OfficeTypeId,
+            request.Gender,
             request.DateOfBirth,
             request.YearOfBirth,
             request.MonthOfBirth,

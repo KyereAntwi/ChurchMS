@@ -1,4 +1,5 @@
 ﻿using COPDistrictMS.Application;
+using COPDistrictMS.Application.Contracts.Persistence;
 using COPDistrictMS.Persistence.Data;
 using COPDistrictMS.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,10 @@ public static class Startup
 
         // add services
         services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
+        services.AddScoped<IDistrictRepository, DistrictRepository>();
+        services.AddScoped<IAssemblyRepository, AssemblyRepository>();
+        services.AddScoped<IMemberRepository, MemberRepository>();
+        services.AddScoped<IOfficerRepository, OfficerRepository>();
 
         return services;
     }
