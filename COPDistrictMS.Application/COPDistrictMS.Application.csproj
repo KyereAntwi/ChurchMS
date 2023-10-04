@@ -19,9 +19,4 @@
       <ProjectReference Include="..\COPDistrictMS.Domain\COPDistrictMS.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\OfficeTypes\Commands\" />
-      <Folder Include="Features\OfficeTypes\Queries\" />
-    </ItemGroup>
-
 </Project>
