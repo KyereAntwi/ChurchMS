@@ -12,7 +12,7 @@ public static class PersistenceServiceRegistration
 {
     public static IServiceCollection RegisterPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<COPDistrictMSContext>(options => options.UseSqlite("Data Source=COPDistrictMS.db", 
+        services.AddDbContext<COPDistrictMSContext>(options => options.UseSqlite(configuration.GetConnectionString("COPMSConnectionString"), 
             b => b.MigrationsAssembly("COPDistrictMS.WebApi")));
 
         // add services

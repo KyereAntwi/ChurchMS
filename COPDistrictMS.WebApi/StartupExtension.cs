@@ -94,7 +94,7 @@ public static class StartupExtension
             c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
-                Title = "SVoting Online System API",
+                Title = "COP District Management Online System API",
 
             });
 

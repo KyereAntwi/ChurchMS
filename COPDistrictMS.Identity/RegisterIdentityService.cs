@@ -20,8 +20,8 @@ public static class RegisterIdentityService
     {
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
-        services.AddDbContext<IdentityContext>(options => options.UseSqlite(configuration.GetConnectionString("SVotingConnectionString"),
-            b => b.MigrationsAssembly("SVoting.Presentation.WebApi")));
+        services.AddDbContext<IdentityContext>(options => options.UseSqlite(configuration.GetConnectionString("COPMSConnectionString"),
+            b => b.MigrationsAssembly("COPDistrictMS.WebApi")));
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
