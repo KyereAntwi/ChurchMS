@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\COPDistrictMS.Identity\COPDistrictMS.Identity.csproj" />
 	  <ProjectReference Include="..\COPDistrictMS.Intrastructure\COPDistrictMS.Infrastructure.csproj" />
 	  <ProjectReference Include="..\COPDistrictMS.Persistence\COPDistrictMS.Persistence.csproj" />
 	</ItemGroup>

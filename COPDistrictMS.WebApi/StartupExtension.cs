@@ -2,6 +2,7 @@
 using COPDistrictMS.Application;
 using COPDistrictMS.Infrastructure;
 using COPDistrictMS.Persistence;
+using COPDistrictMS.Identity;
 
 namespace COPDistrictMS.WebApi;
 
@@ -14,6 +15,7 @@ public static class StartupExtension
         builder.Services.RegisterApplicationServices();
         builder.Services.RegisterPersistenceServices(builder.Configuration);
         builder.Services.RegisterInfrastructureServices(builder.Configuration);
+        builder.Services.AddIdentityServices(builder.Configuration);
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers();

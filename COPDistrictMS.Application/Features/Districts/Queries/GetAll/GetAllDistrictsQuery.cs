@@ -2,6 +2,8 @@
 using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Application.Features.Dtos;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace COPDistrictMS.Application.Features.Districts.Queries.GetAll;
 
@@ -11,18 +13,22 @@ public class GetAllDistrictsQueryHandler : IRequestHandler<GetAllDistrictsQuery,
 {
     private readonly IDistrictRepository _asyncRepository;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public GetAllDistrictsQueryHandler(IDistrictRepository asyncRepository, IMapper mapper)
+    public GetAllDistrictsQueryHandler(IDistrictRepository asyncRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _asyncRepository = asyncRepository;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<BaseResponse> Handle(GetAllDistrictsQuery request, CancellationToken cancellationToken)
     {
         List<DistrictDto> districtDtos = new List<DistrictDto>();
 
-        var list = await _asyncRepository.ListAllAsync();
+        string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+        var list = await _asyncRepository.GetAllOwned(userId);
 
         if (list.Any())
         {

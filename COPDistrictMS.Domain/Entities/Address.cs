@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace COPDistrictMS.Domain.Entities;
 
 public class Address
 {
+    [Key]
     public Guid MemberId { get; set; }
     public Member? Member { get; set; }
     public string Residence { get; set; } = String.Empty;

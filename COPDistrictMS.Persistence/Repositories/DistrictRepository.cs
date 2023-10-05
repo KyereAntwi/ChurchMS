@@ -14,6 +14,9 @@ public class DistrictRepository : BaseRepository<District>, IDistrictRepository
         _dbContext = dbContext;
     }
 
+    public async Task<IReadOnlyList<District>> GetAllOwned(string userId) => 
+        await _dbContext.Districts.Where(d => d.CreatedBy == userId).ToListAsync();
+
     public async Task<IReadOnlyList<Guid>> GetDistrictAssemblyIds(Guid districtId)
     {
         var list = await GetDistrictWithAssembliesFull(districtId);
