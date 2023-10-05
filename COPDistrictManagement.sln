@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COPDistrictMS.WebApi.Contro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COPDistrictMS.WebApi", "COPDistrictMS.WebApi\COPDistrictMS.WebApi.csproj", "{57D6F0B7-43AF-4A98-9EF8-48B49882931F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COPDistrictMS.Identity", "COPDistrictMS.Identity\COPDistrictMS.Identity.csproj", "{22A73A64-E8D3-4E46-BA7D-3A08EC142EBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{57D6F0B7-43AF-4A98-9EF8-48B49882931F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57D6F0B7-43AF-4A98-9EF8-48B49882931F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57D6F0B7-43AF-4A98-9EF8-48B49882931F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22A73A64-E8D3-4E46-BA7D-3A08EC142EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22A73A64-E8D3-4E46-BA7D-3A08EC142EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22A73A64-E8D3-4E46-BA7D-3A08EC142EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22A73A64-E8D3-4E46-BA7D-3A08EC142EBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{C3DDD79E-9674-43E3-9E26-32F8FBA72F66} = {FD983C9E-6AD3-496C-889F-6382E55BB6AD}
 		{84DC16C9-1408-489D-BE3F-46B02AD66B55} = {C3DDD79E-9674-43E3-9E26-32F8FBA72F66}
 		{57D6F0B7-43AF-4A98-9EF8-48B49882931F} = {C3DDD79E-9674-43E3-9E26-32F8FBA72F66}
+		{22A73A64-E8D3-4E46-BA7D-3A08EC142EBF} = {9EDD0B3C-D97E-478D-BB64-FFF5F0578908}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {244D494E-4FCB-4F9D-8DEA-F5965C10B719}
