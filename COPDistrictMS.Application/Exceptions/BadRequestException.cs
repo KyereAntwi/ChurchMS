@@ -1,4 +1,4 @@
-﻿namespace SVoting.Application.Exceptions;
+﻿namespace COPDistrictMS.Application.Exceptions;
 
 public class BadRequestException : Exception
 {

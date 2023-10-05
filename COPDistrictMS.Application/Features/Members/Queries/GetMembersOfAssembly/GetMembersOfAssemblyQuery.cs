@@ -4,7 +4,7 @@ using COPDistrictMS.Application.Contracts.Persistence;
 using COPDistrictMS.Application.Features.Dtos;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
-using SVoting.Application.Exceptions;
+using COPDistrictMS.Application.Exceptions;
 
 namespace COPDistrictMS.Application.Features.Members.Queries.GetMembersOfAssembly;
 

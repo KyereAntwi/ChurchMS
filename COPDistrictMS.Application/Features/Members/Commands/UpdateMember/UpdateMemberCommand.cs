@@ -5,7 +5,7 @@ using COPDistrictMS.Application.Contracts.Persistence;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using SVoting.Application.Exceptions;
+using COPDistrictMS.Application.Exceptions;
 
 namespace COPDistrictMS.Application.Features.Members.Commands.UpdateMember;
 

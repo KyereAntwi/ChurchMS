@@ -1,5 +1,6 @@
 ﻿using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Application.Features.Districts.Commands.CreateADistrict;
+using COPDistrictMS.Application.Features.Districts.Commands.DeleteDistrict;
 using COPDistrictMS.Application.Features.Districts.Queries.GetAll;
 using COPDistrictMS.Application.Features.Districts.Queries.GetSingle; 
 using MediatR;
@@ -9,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace COPDistrictMS.WebApi.Controllers.Controllers;
 
-[Route("api/districts")]
 [Authorize]
 [ApiController]
+[Route("api/districts")]
 public class DistrictController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -37,6 +38,8 @@ public class DistrictController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<BaseResponse>> Create([FromBody] CreateADistrictCommand command)
     {
         var result = await _mediator.Send(command);
@@ -47,5 +50,12 @@ public class DistrictController : ControllerBase
         }
         
         return BadRequest(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<BaseResponse>> Delete([FromRoute] Guid id)
+    {
+        _= await _mediator.Send(new DeleteDistrictCommand(id));
+        return NoContent();
     }
 }

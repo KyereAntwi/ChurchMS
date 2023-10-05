@@ -1,7 +1,7 @@
 ﻿using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
-using SVoting.Application.Exceptions;
+using COPDistrictMS.Application.Exceptions;
 
 namespace COPDistrictMS.Application.Features.Members.Commands.DeleteMember;
 

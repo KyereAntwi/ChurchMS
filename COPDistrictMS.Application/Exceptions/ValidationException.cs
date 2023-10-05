@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace SVoting.Application.Exceptions;
+namespace COPDistrictMS.Application.Exceptions;
 
 public class ValidationException : Exception
 {

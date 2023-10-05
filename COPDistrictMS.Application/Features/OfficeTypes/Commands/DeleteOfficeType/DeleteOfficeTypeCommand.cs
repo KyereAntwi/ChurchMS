@@ -2,7 +2,7 @@
 using COPDistrictMS.Application.Contracts.Persistence;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
-using SVoting.Application.Exceptions;
+using COPDistrictMS.Application.Exceptions;
 
 namespace COPDistrictMS.Application.Features.OfficeTypes.Commands.DeleteOfficeType;
 

@@ -3,6 +3,7 @@ using COPDistrictMS.Application;
 using COPDistrictMS.Infrastructure;
 using COPDistrictMS.Persistence;
 using COPDistrictMS.Identity;
+using COPDistrictMS.WebApi.Middleware;
 
 namespace COPDistrictMS.WebApi;
 
@@ -22,7 +23,7 @@ public static class StartupExtension
 
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            options.AddPolicy("Open", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
         });
 
         builder.Services.AddControllers()
@@ -49,7 +50,7 @@ public static class StartupExtension
 
         app.UseAuthentication();
 
-        // app.UseCustomExceptionHandler();
+        app.UseCustomExceptionHandler();
 
         app.UseCors("Open");
 
