@@ -8,12 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace COPDistrictMS.Persistence;
 
-public static class Startup
+public static class PersistenceServiceRegistration
 {
     public static IServiceCollection RegisterPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<COPDistrictMSContext>(options => options.UseSqlite("Data Source=COPDistrictMS.db", 
-            b => b.MigrationsAssembly("COPDistrictMS.Presentation.WebApi")));
+            b => b.MigrationsAssembly("COPDistrictMS.WebApi")));
 
         // add services
         services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));

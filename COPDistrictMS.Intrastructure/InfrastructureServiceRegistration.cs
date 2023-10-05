@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace COPDistrictMS.Infrastructure;
 
-public static class Startup
+public static class InfrastructureServiceRegistration
 {
-    public static IServiceCollection RegisterPersistenceServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection RegisterInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         // add services
         services.AddSingleton<IImageService, ImageService>();
