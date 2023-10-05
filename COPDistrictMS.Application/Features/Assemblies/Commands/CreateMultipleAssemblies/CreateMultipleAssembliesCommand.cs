@@ -8,10 +8,11 @@ using System.Security.Claims;
 
 namespace COPDistrictMS.Application.Features.Assemblies.Commands.CreateMultipleAssemblies;
 
-public record CreateMultipleAssembliesCommand(
-    Guid DistrictId,
-    List<CreateAssemblyDto> CreateAssemblyDtos
-    ) : IRequest<BaseResponse>;
+public class CreateMultipleAssembliesCommand: IRequest<BaseResponse>
+{
+    public Guid DistrictId { get; set; }
+    public List<CreateAssemblyDto> CreateAssemblyDtos { get; set; } = new List<CreateAssemblyDto>();
+}
 
 public class CreateMultipleAssembliesCommandHandler : IRequestHandler<CreateMultipleAssembliesCommand, BaseResponse>
 {
