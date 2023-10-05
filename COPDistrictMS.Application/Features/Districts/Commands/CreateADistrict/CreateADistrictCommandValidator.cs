@@ -14,7 +14,7 @@ public class CreateADistrictCommandValidator : AbstractValidator<CreateADistrict
             .NotEmpty().WithMessage("{PropertyName} must not be empty")
             .NotNull();
 
-        RuleFor(d => d.DistrictPastor)
+        RuleFor(d => d.DistrictPastorFullName)
             .NotEmpty().WithMessage("{PropertyName} must not be empty")
             .NotNull();
     }

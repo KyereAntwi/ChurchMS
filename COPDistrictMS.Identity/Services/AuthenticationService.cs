@@ -13,13 +13,13 @@ namespace COPDistrictMS.Identity.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<IdentityUser> _userManager;
     private readonly JwtSettings _jwtSettings;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
-    public AuthenticationService(UserManager<ApplicationUser> userManager,
+    public AuthenticationService(UserManager<IdentityUser> userManager,
         IOptions<JwtSettings> jwtSettings,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<IdentityUser> signInManager)
     {
         _userManager = userManager;
         _jwtSettings = jwtSettings.Value;
@@ -91,7 +91,7 @@ public class AuthenticationService : IAuthenticationService
         }
     }
 
-    private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)
+    private async Task<JwtSecurityToken> GenerateToken(IdentityUser user)
     {
         var userClaims = await _userManager.GetClaimsAsync(user);
         var roles = await _userManager.GetRolesAsync(user);

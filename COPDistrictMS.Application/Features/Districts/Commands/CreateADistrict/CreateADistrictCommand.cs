@@ -10,7 +10,7 @@ namespace COPDistrictMS.Application.Features.Districts.Commands.CreateADistrict;
 public record CreateADistrictCommand(
     string Title,
     string Area,
-    string DistrictPastor
+    string DistrictPastorFullName
     ) : IRequest<BaseResponse>;
 
 public class CreateADistrictCommandHandler : IRequestHandler<CreateADistrictCommand, BaseResponse>

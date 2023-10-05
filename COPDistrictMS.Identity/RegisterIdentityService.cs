@@ -23,7 +23,7 @@ public static class RegisterIdentityService
         services.AddDbContext<IdentityContext>(options => options.UseSqlite(configuration.GetConnectionString("COPMSConnectionString"),
             b => b.MigrationsAssembly("COPDistrictMS.WebApi")));
 
-        services.AddIdentity<ApplicationUser, IdentityRole>()
+        services.AddIdentity <IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
 
         services.AddTransient<IAuthenticationService, AuthenticationService>();
