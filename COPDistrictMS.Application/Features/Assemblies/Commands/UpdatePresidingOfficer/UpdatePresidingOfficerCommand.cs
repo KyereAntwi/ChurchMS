@@ -34,7 +34,10 @@ public class UpdatePresidingOfficerCommandHandler : IRequestHandler<UpdatePresid
         if(member is null)
             throw new NotFoundException($"Specified member with id {request.MemberId} does not exist.", nameof(Member));
 
-        assembly.PresidingOfficer = member;
+        assembly.PresidingOfficer = new AssemblyPresiding()
+        {
+            Member = member,
+        };
 
         await _assemblyRepository.SaveAsync();
 

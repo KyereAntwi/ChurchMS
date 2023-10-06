@@ -19,7 +19,7 @@ public class AssemblyRepository : BaseRepository<Assembly>, IAssemblyRepository
         var assembly = await _dbContext.Assemblies.Include(a => a.Managers).FirstOrDefaultAsync(a => a.Id == id);
         foreach (var manager in managersUsernames)
         {
-            assembly!.Managers.Add(manager);
+            assembly!.Managers.Add(new Manager { Username = manager });
         }
         await _dbContext.SaveChangesAsync();
     }
@@ -35,7 +35,7 @@ public class AssemblyRepository : BaseRepository<Assembly>, IAssemblyRepository
     public async Task<IReadOnlyList<Assembly>> GetManagedAssemblies(string username) =>
         await _dbContext.Assemblies
         .Include(a => a.Managers)
-        .Where(a => a.Managers.Contains(username))
+        .Where(a => a.Managers.Contains(new Manager { Username = username }))
         .Select(a => new Assembly { Id = a.Id, Title = a.Title, Location = a.Location })
         .ToListAsync();
 }

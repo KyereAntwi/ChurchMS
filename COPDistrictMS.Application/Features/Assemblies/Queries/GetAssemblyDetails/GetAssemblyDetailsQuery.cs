@@ -40,10 +40,16 @@ public class GetAssemblyDetailsQueryHandler : IRequestHandler<GetAssemblyDetails
         }
 
         if (assembly.Managers.Count > 0)
-            assemblyDto.ManagersUsernames = assembly.Managers;
+        {
+            assemblyDto.ManagersUsernames = new List<string>();
+            foreach ( var manager in assembly.Managers )
+            {
+                assemblyDto.ManagersUsernames.Add(manager.Username);
+            }
+        }
 
         if (assembly.PresidingOfficer is not null)
-            assemblyDto.PresidingLeader = assembly.PresidingOfficer.Id;
+            assemblyDto.PresidingLeader = assembly.PresidingOfficer.MemberId;
 
         response.Data = assemblyDto;
 

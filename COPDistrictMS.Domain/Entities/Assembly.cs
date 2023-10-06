@@ -9,7 +9,8 @@ public class Assembly : BaseEntity
     public Guid DistrictId { get; set; }
     public District? District { get; set; }
 
-    public ICollection<Member> Members { get; set; } = default!;
-    public ICollection<string> Managers { get; set; } = default!;
-    public Member? PresidingOfficer { get; set; }
+    // public ICollection<Member> Members { get; set; } = default!;
+    public ICollection<Manager> Managers { get; set; } = default!;
+    public ICollection<AssemblyOffering> Offerings { get; set; } = default!;
+    public AssemblyPresiding? PresidingOfficer { get; set; }
 }
