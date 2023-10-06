@@ -14,9 +14,28 @@ public class AssemblyRepository : BaseRepository<Assembly>, IAssemblyRepository
         _dbContext = dbContext;
     }
 
+    public async Task AddManagersToAssembly(Guid id, List<string> managersUsernames)
+    {
+        var assembly = await _dbContext.Assemblies.Include(a => a.Managers).FirstOrDefaultAsync(a => a.Id == id);
+        foreach (var manager in managersUsernames)
+        {
+            assembly!.Managers.Add(manager);
+        }
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task<Assembly?> GetAssemblyWithDistrict(Guid id) => await
         _dbContext
             .Assemblies
             .Include(a => a.District)
+            .Include(a => a.Managers)
+            .Include(a => a.PresidingOfficer)
             .FirstOrDefaultAsync(a => a.Id == id);
+
+    public async Task<IReadOnlyList<Assembly>> GetManagedAssemblies(string username) =>
+        await _dbContext.Assemblies
+        .Include(a => a.Managers)
+        .Where(a => a.Managers.Contains(username))
+        .Select(a => new Assembly { Id = a.Id, Title = a.Title, Location = a.Location })
+        .ToListAsync();
 }

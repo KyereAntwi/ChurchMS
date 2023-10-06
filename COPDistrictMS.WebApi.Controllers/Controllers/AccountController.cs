@@ -21,6 +21,12 @@ public class AccountController : ControllerBase
         return Ok(await _authenticationService.AuthenticateAsync(request));
     }
 
+    [HttpPost("register/admin")]
+    public async Task<ActionResult<RegistrationResponse>> RegisterMasterAsync([FromBody] RegistrationRequest request)
+    {
+        return Ok(await _authenticationService.RegisterAdminsAsync(request));
+    }
+
     [HttpPost("register")]
     public async Task<ActionResult<RegistrationResponse>> RegisterAsync([FromBody] RegistrationRequest request)
     {

@@ -7,4 +7,6 @@ public class AssemblyDto
     public string Location { get; set; } = string.Empty;
     public string YearEstablished { get; set; } = string.Empty;
     public DistrictDto? District { get; set; }
+    public IEnumerable<string>? ManagersUsernames { get; set; }
+    public Guid PresidingLeader { get; set; }
 };

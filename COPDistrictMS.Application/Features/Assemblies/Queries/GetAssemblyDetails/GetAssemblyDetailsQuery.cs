@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Application.Contracts.Persistence;
+using COPDistrictMS.Application.Exceptions;
 using COPDistrictMS.Application.Features.Dtos;
 using COPDistrictMS.Domain.Entities;
 using MediatR;
-using COPDistrictMS.Application.Exceptions;
 
 namespace COPDistrictMS.Application.Features.Assemblies.Queries.GetAssemblyDetails;
 
@@ -38,6 +38,12 @@ public class GetAssemblyDetailsQueryHandler : IRequestHandler<GetAssemblyDetails
         {
             assemblyDto.District = _mapper.Map<DistrictDto>(assembly.District);
         }
+
+        if (assembly.Managers.Count > 0)
+            assemblyDto.ManagersUsernames = assembly.Managers;
+
+        if (assembly.PresidingOfficer is not null)
+            assemblyDto.PresidingLeader = assembly.PresidingOfficer.Id;
 
         response.Data = assemblyDto;
 

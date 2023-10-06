@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace COPDistrictMS.WebApi.Controllers.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")]
 [ApiController]
 [Route("api/districts")]
 public class DistrictController : ControllerBase

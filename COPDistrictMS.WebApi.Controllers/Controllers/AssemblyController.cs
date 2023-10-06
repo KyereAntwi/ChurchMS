@@ -1,12 +1,16 @@
 using COPDistrictMS.Application.Commons;
+using COPDistrictMS.Application.Features.Assemblies.Commands.AddManagersToAssembly;
 using COPDistrictMS.Application.Features.Assemblies.Commands.CreateAnAssembly;
 using COPDistrictMS.Application.Features.Assemblies.Commands.CreateMultipleAssemblies;
 using COPDistrictMS.Application.Features.Assemblies.Commands.DeleteAssembly;
 using COPDistrictMS.Application.Features.Assemblies.Commands.UpdateAssembly;
+using COPDistrictMS.Application.Features.Assemblies.Commands.UpdatePresidingOfficer;
 using COPDistrictMS.Application.Features.Assemblies.Queries.GetAssemblyDetails;
+using COPDistrictMS.Application.Features.Assemblies.Queries.GetManagedAssemblies;
 using COPDistrictMS.Application.Features.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace COPDistrictMS.WebApi.Controllers.Controllers;
@@ -21,6 +25,14 @@ public class AssemblyController : ControllerBase
     public AssemblyController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<BaseResponse>> GetManaged()
+    {
+        var result = await _mediator.Send(new GetManagedAssembliesQuery());
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
@@ -91,5 +103,21 @@ public class AssemblyController : ControllerBase
     {
         _ = await _mediator.Send(new DeleteAssemblyCommand(id));
         return NoContent();
+    }
+
+    [HttpPost("{assemblyId:guid}/presiding/{memberId:guid}")]
+    public async Task<ActionResult<BaseResponse>> UpdatePresidingLeader([FromRoute] Guid assemblyId, [FromRoute] Guid memberId)
+    {
+        var result = await _mediator.Send(new UpdatePresidingOfficerCommand(assemblyId, memberId));
+        return Accepted(result);
+    }
+
+    [HttpPost("{assemblyId:guid}/manage")]
+    public async Task<ActionResult<BaseResponse>> UpdateManagersList([FromRoute] Guid assemblyId, [FromBody] List<string> managersUsernames)
+    {
+        var result = await _mediator.Send(
+            new AddManagersToAssemblyCommand { AssemblyId = assemblyId, ManageUsernames = managersUsernames });
+
+        return Accepted(result);
     }
 }

@@ -44,14 +44,57 @@ public class AuthenticationService : IAuthenticationService
 
         JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
 
+        var roles = await _userManager.GetRolesAsync(user);
+
         AuthenticationResponse response = new AuthenticationResponse
         {
             Id = user.Id,
             Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-            Email = user.Email!
+            Email = user.Email!,
+            Username = user.UserName!,
+            Role = roles.FirstOrDefault()
         };
 
         return response;
+    }
+
+    public async Task<RegistrationResponse> RegisterAdminsAsync(RegistrationRequest request)
+    {
+        var existingUser = await _userManager.FindByNameAsync(request.Email);
+
+        if (existingUser != null)
+        {
+            throw new Exception($"Username '{request.Email}' already exists.");
+        }
+
+        var user = new ApplicationUser
+        {
+            Email = request.Email,
+            UserName = request.Email,
+            EmailConfirmed = true
+        };
+
+        var existingEmail = await _userManager.FindByEmailAsync(request.Email);
+
+        if (existingEmail == null)
+        {
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            if (result.Succeeded)
+            {
+                var newUser = await _userManager.FindByEmailAsync(user.Email);
+                await _userManager.AddToRoleAsync(newUser!, "Admin");
+                return new RegistrationResponse() { UserId = user.Id };
+            }
+            else
+            {
+                throw new Exception($"{result.Errors}");
+            }
+        }
+        else
+        {
+            throw new Exception($"Email {request.Email} already exists.");
+        }
     }
 
     public async Task<RegistrationResponse> RegisterAsync(RegistrationRequest request)
@@ -78,6 +121,8 @@ public class AuthenticationService : IAuthenticationService
 
             if (result.Succeeded)
             {
+                var newUser = await _userManager.FindByEmailAsync(user.Email);
+                await _userManager.AddToRoleAsync(newUser!, "Manager");
                 return new RegistrationResponse() { UserId = user.Id };
             }
             else
