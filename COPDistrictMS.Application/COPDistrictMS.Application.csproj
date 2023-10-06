@@ -19,4 +19,8 @@
       <ProjectReference Include="..\COPDistrictMS.Domain\COPDistrictMS.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Offerings\" />
+    </ItemGroup>
+
 </Project>

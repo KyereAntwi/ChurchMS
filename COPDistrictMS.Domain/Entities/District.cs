@@ -7,4 +7,5 @@ public class District : BaseEntity
     public string? DistrictPastorFullName { get; set; }
 
     public ICollection<Assembly> Assemblies { get; set; } = default!;
+    public ICollection<MinistryOffering> MinistryOfferings { get; set; } = default!;
 }
