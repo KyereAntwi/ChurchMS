@@ -8,6 +8,8 @@ using COPDistrictMS.Application.Features.Assemblies.Commands.UpdatePresidingOffi
 using COPDistrictMS.Application.Features.Assemblies.Queries.GetAssemblyDetails;
 using COPDistrictMS.Application.Features.Assemblies.Queries.GetManagedAssemblies;
 using COPDistrictMS.Application.Features.Dtos;
+using COPDistrictMS.Application.Features.Offerings.Commands.AddAssemblyOffering;
+using COPDistrictMS.Application.Features.Offerings.Queries.GetAssemblyOfferings;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +42,15 @@ public class AssemblyController : ControllerBase
     {
         var result = await _mediator.Send(new GetAssemblyDetailsQuery(id));
         return Ok(result);
+    }
+
+    [HttpGet("{assemblyId:guid}/offerings")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<BaseResponse>> GetOfferings([FromRoute] Guid assemblyId, [FromQuery] int page,
+        [FromQuery] int size, [FromQuery] string offeringType)
+    {
+        var response = await _mediator.Send(new GetAssemblyOfferingsQuery(assemblyId, page, size, offeringType));
+        return Ok(response);
     }
 
     [HttpPost]
@@ -84,6 +95,18 @@ public class AssemblyController : ControllerBase
         }
 
         return BadRequest(result);
+    }
+
+    [HttpPost("{assemblyId:guid}/offerings")]
+    public async Task<ActionResult<BaseResponse>> AddOffering([FromRoute] Guid assemblyId,
+        [FromBody] AddAssemblyOfferingCommand command)
+    {
+        var response = await _mediator.Send(command);
+
+        if (!response.Success)
+            return BadRequest(response);
+        
+        return Accepted(response);
     }
 
     [HttpPut("{id:guid}")]

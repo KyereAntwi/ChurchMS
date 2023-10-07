@@ -2,7 +2,9 @@
 using COPDistrictMS.Application.Features.Districts.Commands.CreateADistrict;
 using COPDistrictMS.Application.Features.Districts.Commands.DeleteDistrict;
 using COPDistrictMS.Application.Features.Districts.Queries.GetAll;
-using COPDistrictMS.Application.Features.Districts.Queries.GetSingle; 
+using COPDistrictMS.Application.Features.Districts.Queries.GetSingle;
+using COPDistrictMS.Application.Features.Offerings.Commands.AddMinistryOffering;
+using COPDistrictMS.Application.Features.Offerings.Queries.GetMinistryOfferings;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +39,14 @@ public class DistrictController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{districtId:guid}/ministries/offerings")]
+    public async Task<ActionResult<BaseResponse>> GetMinistryOffering([FromRoute] Guid districtId,
+        [FromQuery] string ministry, [FromQuery] int page = 1, [FromQuery] int size = 20)
+    {
+        var response = await _mediator.Send(new GetMinistryOfferingsQuery(districtId, page, size, ministry));
+        return Ok(response);
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -50,6 +60,18 @@ public class DistrictController : ControllerBase
         }
         
         return BadRequest(result);
+    }
+
+    [HttpPost("{districtId:guid}/ministries/offerings")]
+    public async Task<ActionResult<BaseResponse>> AddMinistryOffering([FromRoute] Guid districtId,
+        [FromBody] AddMinistryOfferingCommand command)
+    {
+        var response = await _mediator.Send(command);
+
+        if (!response.Success)
+            return BadRequest(response);
+        
+        return Accepted(response);
     }
 
     [HttpDelete("{id:guid}")]

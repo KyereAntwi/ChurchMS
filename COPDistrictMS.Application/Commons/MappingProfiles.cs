@@ -6,6 +6,8 @@ using COPDistrictMS.Application.Features.Districts.Commands.UpdateDistrict;
 using COPDistrictMS.Application.Features.Dtos;
 using COPDistrictMS.Application.Features.Members.Commands.AddAMember;
 using COPDistrictMS.Application.Features.Members.Commands.UpdateMember;
+using COPDistrictMS.Application.Features.Offerings.Commands.AddAssemblyOffering;
+using COPDistrictMS.Application.Features.Offerings.Commands.AddMinistryOffering;
 using COPDistrictMS.Domain.Entities;
 
 namespace COPDistrictMS.Application.Commons;
@@ -27,5 +29,9 @@ public class MappingProfiles : Profile
         CreateMap<AddAMemberCommand, Address>();
         CreateMap<UpdateMemberCommand, Member>();
         CreateMap<UpdateMemberCommand, Address>();
+        CreateMap<AddAssemblyOfferingCommand, AssemblyOffering>();
+        CreateMap<AddMinistryOfferingCommand, MinistryOffering>();
+        CreateMap<AssemblyOffering, AssemblyOfferingDto>();
+        CreateMap<MinistryOffering, MinistryOfferingDto>();
     }
 }

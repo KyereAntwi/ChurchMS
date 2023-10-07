@@ -28,4 +28,21 @@ public class DistrictRepository : BaseRepository<District>, IDistrictRepository
             .Districts
             .Include(d => d.Assemblies)
             .FirstOrDefaultAsync(d => d.Id == districtId);
+
+    public async Task<(int, IReadOnlyList<MinistryOffering>)> GetDistrictOfferings(Guid districtId, string ministry, int page, int size)
+    {
+        var list = _dbContext.MinistryOfferings
+            .Where(o => o.DistrictId == districtId)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(ministry))
+        {
+            list = list.Where(l => l.Ministry.ToLower().Contains(ministry.ToLower()));
+        }
+
+        var listToSend = list.Skip((page - 1) * size).Take(size)
+            .AsNoTracking();
+
+        return (list.Count(), await listToSend.ToListAsync());
+    }
 }

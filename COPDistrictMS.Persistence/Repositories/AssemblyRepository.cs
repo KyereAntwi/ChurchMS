@@ -38,4 +38,21 @@ public class AssemblyRepository : BaseRepository<Assembly>, IAssemblyRepository
         .Where(a => a.Managers.Contains(new Manager { Username = username }))
         .Select(a => new Assembly { Id = a.Id, Title = a.Title, Location = a.Location })
         .ToListAsync();
+
+    public async Task<(int, IReadOnlyList<AssemblyOffering>)> GetAssemblyOfferings(Guid assemblyId, string offeringType, int page, int size)
+    {
+        var list = _dbContext.AssemblyOfferings
+            .Where(o => o.AssemblyId == assemblyId)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(offeringType))
+        {
+            list = list.Where(l => l.OfferingType.ToLower().Contains(offeringType.ToLower()));
+        }
+
+        var listToSend = list.Skip((page - 1) * size).Take(size)
+            .AsNoTracking();
+
+        return (list.Count(), await listToSend.ToListAsync());
+    }
 }

@@ -24,9 +24,11 @@ public class MemberRepository : BaseRepository<Member>, IMemberRepository
 
     public async Task<(IReadOnlyList<Member>, int)> GetMembersByAssembly(Guid assemblyId, int page, int size)
     {
-        var list = _dbContext.Members.Include(m => m.Assembly).AsQueryable();
+        var list = _dbContext.Members
+            .Include(m => m.Assembly)
+            .AsQueryable();
         
-        list = list
+        var listToSend = list
             .Skip((page - 1) * size).Take(size)
             .AsNoTracking()
             .OrderBy(m => m.LastName)
@@ -43,7 +45,7 @@ public class MemberRepository : BaseRepository<Member>, IMemberRepository
                 Assembly = new Assembly(){ Title = m.Assembly!.Title }
             });
 
-        return (await list.ToListAsync(), list.Count());
+        return (await listToSend.ToListAsync(), list.Count());
     }
 
     public async Task<(IReadOnlyList<Member>, int)> FilterMembersByDistrict(Guid assemblyId, Guid districtId, string nameString, string gender,
@@ -90,7 +92,7 @@ public class MemberRepository : BaseRepository<Member>, IMemberRepository
             list = list.Where(m => m.DateOfBirth.Month == month);
         }
         
-        list = list
+        var listToSend = list
             .Skip((page - 1) * size).Take(size)
             .AsNoTracking()
             .OrderBy(m => m.LastName)
@@ -106,6 +108,6 @@ public class MemberRepository : BaseRepository<Member>, IMemberRepository
                 Assembly = new Assembly(){ Title = m.Assembly!.Title }
             });
 
-        return (await list.ToListAsync(), list.Count());
+        return (await listToSend.ToListAsync(), list.Count());
     }
 }
