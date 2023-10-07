@@ -15,4 +15,5 @@ public class COPDistrictMSContext : DbContext
     public DbSet<Member> Members { get; set; } = default!;
     public DbSet<AssemblyOffering> AssemblyOfferings { get; set; } = default!;
     public DbSet<MinistryOffering> MinistryOfferings { get; set; } = default!;
+    public DbSet<OfficersMeeting> OfficersMeetings { get; set; } = default!;
 }

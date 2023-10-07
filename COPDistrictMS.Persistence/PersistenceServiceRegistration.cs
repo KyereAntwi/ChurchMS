@@ -21,6 +21,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IAssemblyRepository, AssemblyRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<IOfficerRepository, OfficerRepository>();
+        services.AddScoped<IOfficersMeetingRepository, OfficersMeetingRepository>();
 
         return services;
     }

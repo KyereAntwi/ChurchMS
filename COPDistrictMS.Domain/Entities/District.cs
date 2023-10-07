@@ -8,4 +8,5 @@ public class District : BaseEntity
 
     public ICollection<Assembly> Assemblies { get; set; } = default!;
     public ICollection<MinistryOffering> MinistryOfferings { get; set; } = default!;
+    public ICollection<OfficersMeeting> OfficersMeetings { get; set; } = default!;
 }
