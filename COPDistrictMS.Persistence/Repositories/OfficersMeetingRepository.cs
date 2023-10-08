@@ -14,11 +14,35 @@ public class OfficersMeetingRepository : BaseRepository<OfficersMeeting>, IOffic
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyList<OfficersMeeting>> GetMeetingsForDistrict(Guid districtId) =>
-        await _dbContext
+
+    public async Task<(int, IReadOnlyList<OfficersMeeting>)> GetMeetingsForDistrict(
+        Guid districtId, 
+        DateTime createdAt, 
+        string pastorInCharge, 
+        int page, 
+        int size)
+    {
+         var list = _dbContext
             .OfficersMeetings
             .Where(m => m.DistrictId == districtId)
-            .ToListAsync();
+            .AsQueryable();
+
+         if (createdAt != new DateTime())
+         {
+             list = list.Where(m => m.CreatedAt.Date == createdAt.Date);
+         }
+
+         if (!string.IsNullOrWhiteSpace(pastorInCharge))
+         {
+             list = list.Where(m => m.PastorInCharge.ToLower().Contains(pastorInCharge.ToLower()));
+         }
+
+         var listToSend = list.Skip((page - 1) * size).Take(size)
+             .AsNoTracking()
+             .OrderBy(m => m.CreatedAt);
+
+         return (list.Count(), await listToSend.ToListAsync());
+    }
 
     public async Task<OfficersMeeting?> GetMeetingDetailsWithMembers(Guid meetingId) =>
         await _dbContext

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using COPDistrictMS.Application.Commons;
 using COPDistrictMS.Application.Exceptions;
 
 namespace COPDistrictMS.WebApi.Middleware
@@ -31,17 +32,20 @@ namespace COPDistrictMS.WebApi.Middleware
 
             context.Response.ContentType = "application/json";
 
-            var result = string.Empty;
+            var result = new BaseResponse()
+            {
+                Success = false
+            };
 
             switch (exception)
             {
                 case ValidationException validationException:
                     httpStatusCode = HttpStatusCode.BadRequest;
-                    result = JsonSerializer.Serialize(validationException.ValidationErrors);
+                    result.Data = validationException.ValidationErrors;
                     break;
                 case BadRequestException badRequestException:
                     httpStatusCode = HttpStatusCode.BadRequest;
-                    result = badRequestException.Message;
+                    result.Message = badRequestException.Message;
                     break;
                 case NotFoundException:
                     httpStatusCode = HttpStatusCode.NotFound;
@@ -53,12 +57,18 @@ namespace COPDistrictMS.WebApi.Middleware
 
             context.Response.StatusCode = (int)httpStatusCode;
 
-            if (result == string.Empty)
+            if (result.Message == string.Empty || result.Data == null )
             {
-                result = JsonSerializer.Serialize(new { error = exception.Message });
+                var response = new BaseResponse()
+                {
+                    Success = false,
+                    Message = exception.Message 
+                };
+                
+                result = response;
             }
 
-            return context.Response.WriteAsync(result);
+            return context.Response.WriteAsync(JsonSerializer.Serialize(result));
         }
     }
 }

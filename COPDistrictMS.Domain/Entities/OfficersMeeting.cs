@@ -8,4 +8,5 @@ public class OfficersMeeting : BaseEntity
     public string PastorInCharge { get; set; } = String.Empty;
 
     public ICollection<Member> Officers { get; set; } = default!;
+    public ICollection<OfficersMeetingAttachment> Attachments { get; set; } = default!;
 }

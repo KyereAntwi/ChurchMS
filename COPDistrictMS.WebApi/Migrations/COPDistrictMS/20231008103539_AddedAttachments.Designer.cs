@@ -3,6 +3,7 @@ using System;
 using COPDistrictMS.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace COPDistrictMS.WebApi.Migrations.COPDistrictMS
 {
     [DbContext(typeof(COPDistrictMSContext))]
-    partial class COPDistrictMSContextModelSnapshot : ModelSnapshot
+    [Migration("20231008103539_AddedAttachments")]
+    partial class AddedAttachments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
